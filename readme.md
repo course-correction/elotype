@@ -13,6 +13,8 @@ Please note: The pixel raster corresponds to the raster of the Elotype 5. The pi
 0x1000 is approximately 12.5 cm in horizontal direction, 0x0300 is approximately 14.9 cm in vertical direction.
 You also cannot draw continuous lines, as the Elotype 5 will not emboss them if pixels are placed too close to each other. Though, one embossed dot is multiple times larger than a pixel itself.
 
+Install dependencies with `pip install -r requirements.txt`.
+
 ## Wire Protocol
 
 The Elotype is connected to the computer via a USB cable. The Elotype is recognized as a serial device.
@@ -22,7 +24,7 @@ The wire protocol is a simple binary protocol. The first byte is always `0x86` t
 The following is repeated for each line of the graphic, containing a dot to be embossed. A line begins with a two-byte big endian vertical offset. Then, for each dor to be embossed in the line, a two-byte big endian horizontal offset is given. The line is then terminated with `0xFF 0x0D`. And that's basically it. Representing this as an EBNF grammar yields the following:
 
 ```
-PrintCommand ::= '0x86' (LineCommand)
+PrintCommand ::= '0x86' (LineCommand)+
 LineCommand ::= VerticalOffset (HorizontalOffset)+ '0xff0d'
 VerticalOffset ::= '0x0000 - 0xffff'
 HorizontalOffset ::= '0x0000 - 0xffff'
